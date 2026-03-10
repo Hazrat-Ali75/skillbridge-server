@@ -35,19 +35,19 @@ export const auth = betterAuth({
         },
         expiresIn: 60 * 60 * 24 * 7,
     },
-    //   databaseHooks: {
-    //     user: {
-    //       create: {
-    //         after: async (user) => {
-    //           if (user.role === "TUTOR") {
-    //             await prisma.tutorProfile.create({
-    //               data: {
-    //                 userId: user.id,
-    //               },
-    //             });
-    //           }
-    //         },
-    //       },
-    //     },
-    //   },
+    databaseHooks: {
+        user: {
+            create: {
+                after: async (user) => {
+                    if (user.role === "TUTOR") {
+                        await prisma.tutorProfile.create({
+                            data: {
+                                userId: user.id,
+                            },
+                        });
+                    }
+                },
+            },
+        },
+    },
 });

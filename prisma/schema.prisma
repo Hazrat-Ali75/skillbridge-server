@@ -14,19 +14,91 @@ datasource db {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  email         String    @unique
+  id            String        @id @default(cuid())
+  email         String        @unique
   name          String?
-  emailVerified Boolean   @default(false)
+  emailVerified Boolean       @default(false)
   image         String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  role          Role      @default(STUDENT)
-  status        Status    @default(ACTIVE)
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  role          Role          @default(STUDENT)
+  status        Status        @default(ACTIVE)
   sessions      Session[]
   accounts      Account[]
+  tutorProfile  TutorProfile?
+  bookings      Booking?
 
   @@map("user")
+}
+
+model TutorProfile {
+  id                String             @id @default(cuid())
+  userId            String             @unique
+  bio               String?
+  hourlyRate        Float?
+  experience        Int?
+  user              User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+  category          TutorCategory[]
+  availabilitySlots AvailabilitySlot[]
+  bookings          Booking[]
+  reviews           Review[]
+
+  @@map("tutor_profile")
+}
+
+model Category {
+  id     String          @id @default(uuid())
+  name   String          @unique
+  tutors TutorCategory[]
+}
+
+model TutorCategory {
+  tutorId    String
+  categoryId String
+  tutor      TutorProfile @relation(fields: [tutorId], references: [id])
+  category   Category     @relation(fields: [categoryId], references: [id])
+
+  @@id([tutorId, categoryId])
+}
+
+model AvailabilitySlot {
+  id String @id @default(uuid())
+
+  tutorId   String
+  dayOfWeek DayOfWeek?
+
+  startTime DateTime?
+  endTime   DateTime?
+
+  tutor TutorProfile @relation(fields: [tutorId], references: [id])
+
+  @@index([tutorId, dayOfWeek])
+}
+
+model Booking {
+  id          String        @id @default(uuid())
+  studentId   String        @unique
+  tutorId     String        @unique
+  sessionDate DateTime
+  duration    Int
+  status      BookingStatus @default(PENDING)
+  student     User          @relation(fields: [studentId], references: [id])
+  tutor       TutorProfile  @relation(fields: [tutorId], references: [id])
+  createdAt   DateTime      @default(now())
+}
+
+model Review {
+  id        String       @id @default(uuid())
+  rating    Int
+  comment   String?
+  studentId String
+  tutorId   String
+  tutor     TutorProfile @relation(fields: [tutorId], references: [id])
+  createdAt DateTime     @default(now())
+
+  @@unique([studentId, tutorId])
 }
 
 model Session {
@@ -86,4 +158,20 @@ enum Role {
 enum Status {
   ACTIVE
   BANNED
+}
+
+enum DayOfWeek {
+  SUNDAY
+  MONDAY
+  TUESDAY
+  WEDNESDAY
+  THURSDAY
+  FRIDAY
+  SATURDAY
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
 }
