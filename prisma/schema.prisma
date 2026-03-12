@@ -40,7 +40,7 @@ model TutorProfile {
   user              User               @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt         DateTime           @default(now())
   updatedAt         DateTime           @updatedAt
-  category          Category[]
+  tutorCategories   TutorCategory[]
   availabilitySlots AvailabilitySlot[]
   bookings          Booking[]
   reviews           Review[]
@@ -49,12 +49,21 @@ model TutorProfile {
 }
 
 model Category {
-  id      String       @id @default(uuid())
-  name    String
-  tutorId String
-  tutor   TutorProfile @relation(fields: [tutorId], references: [id])
+  id              String          @id @default(uuid())
+  name            String
+  tutorCategories TutorCategory[]
 
   @@map("category")
+}
+
+model TutorCategory {
+  id         String       @id @default(uuid())
+  tutorId    String
+  categoryId String
+  tutor      TutorProfile @relation(fields: [tutorId], references: [id])
+  category   Category     @relation(fields: [categoryId], references: [id])
+
+  @@map("tutor_category")
 }
 
 model AvailabilitySlot {

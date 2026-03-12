@@ -10,5 +10,6 @@ const router = Router();
 router.put("/update-profile", validateRequest(updateTutorProfileSchema), tutorController.updateTutorProfileController);
 router.post("/create-availability", validateRequest(createAvailabilitySlotSchema), tutorController.createAvailabilitySlot);
 router.get("/profile/:userId", tutorController.getTutorProfile);
+router.get("/", tutorController.getAllTutors);
 
 export const tutorRoutes = router;

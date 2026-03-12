@@ -4,6 +4,7 @@ import { fromNodeHeaders, toNodeHandler } from "better-auth/node";
 import { auth } from "./config/auth";
 import { env } from "./config/env";
 import { tutorRoutes } from "./modules/tutor/tutor.route";
+import { categoryRoutes } from "./modules/category/category.route";
 
 const app = express();
 
@@ -23,6 +24,7 @@ app.get("/api/me", async (req, res) => {
 });
 
 app.use("/api/tutor", tutorRoutes);
+app.use("/api/category", categoryRoutes);
 
 app.get("/", (req, res) => {
     res.send("server is running");

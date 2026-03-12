@@ -86,10 +86,58 @@ const getTutorProfile = async (userId: string) => {
     return result;
 }
 
+const getAllTutors = async () => {
+    const result = await prisma.tutorProfile.findMany({
+        select: {
+            id: true,
+            bio: true,
+            hourlyRate: true,
+            experience: true,
+            createdAt: true,
+            updatedAt: true,
+            user: {
+                select: {
+                    email: true,
+                    name: true,
+                    emailVerified: true,
+                    image: true,
+                    role: true,
+                    status: true,
+                }
+            },
+            // category: true,
+            availabilitySlots: {
+                select: {
+                    dayOfWeek: true,
+                    startTime: true,
+                    endTime: true
+                }
+            },
+            // bookings: {
+            //     select: {
+            //         id: true,
+            //     }
+            // },
+            // reviews: {
+            //     select: {
+            //         id: true,
+            //         rating: true,
+            //         comment: true,
+            //         createdAt: true,
+            //         // Exclude tutorId
+            //     }
+            // }
+        }
+    })
+
+    return result;
+}
+
 
 
 export const tutorService = {
     tutorProfileUpdateService,
     createAvailabilitySlot,
-    getTutorProfile
+    getTutorProfile,
+    getAllTutors
 }
