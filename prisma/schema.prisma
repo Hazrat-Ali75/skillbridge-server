@@ -89,16 +89,19 @@ model Booking {
   status      BookingStatus @default(PENDING)
   student     User          @relation(fields: [studentId], references: [id])
   tutor       TutorProfile  @relation(fields: [tutorId], references: [id])
+  reviews     Review[]
   createdAt   DateTime      @default(now())
 }
 
 model Review {
   id        String       @id @default(uuid())
-  rating    Int
+  rating    Float
   comment   String?
+  bookingId String
   studentId String
   tutorId   String       @unique
   tutor     TutorProfile @relation(fields: [tutorId], references: [id])
+  booking   Booking      @relation(fields: [bookingId], references: [id])
   createdAt DateTime     @default(now())
 
   @@unique([studentId, tutorId])

@@ -15,8 +15,20 @@ const createBookingService = async (payload: createBookingPayload) => {
     return result
 }
 
-const getAllBookingsService = async () => {
-    const result = await prisma.booking.findMany()
+const getAllBookingsService = async (id: string) => {
+    const result = await prisma.booking.findMany({
+        where: {
+            id
+        },
+        include: {
+            reviews: {
+                select: {
+                    rating: true,
+                    comment: true
+                }
+            }
+        }
+    })
     return result
 }
 

@@ -21,7 +21,8 @@ const createBookingController = async (req: Request, res: Response) => {
 
 const getAllBookingsController = async (req: Request, res: Response) => {
     try {
-        const result = await bookingService.getAllBookingsService()
+        const { id } = req.query;
+        const result = await bookingService.getAllBookingsService(id as string)
         res.status(200).json({
             success: true,
             message: "Successfully retrieved all bookings",

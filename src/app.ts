@@ -6,6 +6,7 @@ import { env } from "./config/env";
 import { tutorRoutes } from "./modules/tutor/tutor.route";
 import { categoryRoutes } from "./modules/category/category.route";
 import { bookingRoutes } from "./modules/booking/booking.route";
+import { reviewRoute } from "./modules/review/review.route";
 
 const app = express();
 
@@ -27,6 +28,7 @@ app.get("/api/me", async (req, res) => {
 app.use("/api/tutor", tutorRoutes);
 app.use("/api/category", categoryRoutes);
 app.use("/api/bookings", bookingRoutes);
+app.use("/api/reviews", reviewRoute);
 
 app.get("/", (req, res) => {
     res.send("server is running");
