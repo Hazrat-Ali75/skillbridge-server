@@ -1,6 +1,7 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { prisma } from "./prisma";
+import bcrypt from "bcrypt";
 import dotenv from "dotenv";
 import { env } from "./env";
 
@@ -20,6 +21,14 @@ export const auth = betterAuth({
         enabled: true,
         autoSignIn: false,
         requireEmailVerification: false,
+        password: {
+            hash: async (password) => {
+                return await bcrypt.hash(password, 10);
+            },
+            verify: async ({ password, hash }: { password: string; hash: string }) => {
+                return await bcrypt.compare(password, hash);
+            },
+        },
     },
     user: {
         additionalFields: {

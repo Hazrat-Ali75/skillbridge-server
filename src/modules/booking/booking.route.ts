@@ -8,7 +8,7 @@ import { authenticate } from "../../middlewares/authenticate";
 
 const router = Router();
 
-router.post('/create', validateRequest(createBookingSchema), authenticate, authorizeRole("STUDENT"), bookingController.createBookingController);
+router.post('/create', authenticate, authorizeRole("STUDENT"), validateRequest(createBookingSchema), bookingController.createBookingController);
 router.get('/', authenticate, bookingController.getAllBookingsController);
 router.get('/:id', authenticate, bookingController.getBookingByIdController);
 router.put('/:id', authenticate, authorizeRole("TUTOR", "STUDENT"), bookingController.updateBookingStatusController);

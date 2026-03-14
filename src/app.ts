@@ -7,6 +7,7 @@ import { tutorRoutes } from "./modules/tutor/tutor.route";
 import { categoryRoutes } from "./modules/category/category.route";
 import { bookingRoutes } from "./modules/booking/booking.route";
 import { reviewRoute } from "./modules/review/review.route";
+import { adminRoutes } from "./modules/admin/admin.route";
 
 const app = express();
 
@@ -29,6 +30,7 @@ app.use("/api/tutor", tutorRoutes);
 app.use("/api/category", categoryRoutes);
 app.use("/api/bookings", bookingRoutes);
 app.use("/api/reviews", reviewRoute);
+app.use("/api/admin", adminRoutes);
 
 app.get("/", (req, res) => {
     res.send("server is running");
