@@ -9,7 +9,8 @@ import { authenticate } from "../../middlewares/authenticate";
 const router = Router();
 
 router.post('/create', validateRequest(createBookingSchema), authenticate, authorizeRole("STUDENT"), bookingController.createBookingController);
-router.get('/', bookingController.getAllBookingsController);
-router.get('/:id', bookingController.getBookingByIdController);
+router.get('/', authenticate, bookingController.getAllBookingsController);
+router.get('/:id', authenticate, bookingController.getBookingByIdController);
+router.put('/:id', authenticate, authorizeRole("TUTOR", "STUDENT"), bookingController.updateBookingStatusController);
 
 export const bookingRoutes = router;

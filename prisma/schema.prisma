@@ -178,6 +178,6 @@ enum DayOfWeek {
 
 enum BookingStatus {
   PENDING
-  CONFIRMED
+  COMPLETED
   CANCELLED
 }

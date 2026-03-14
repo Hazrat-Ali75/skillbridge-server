@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express";
 
 type Role = "STUDENT" | "TUTOR" | "ADMIN";
 
-export const authorizeRole = (role: Role) => {
+export const authorizeRole = (...allowedRoles: Role[]) => {
     return (req: Request, res: Response, next: NextFunction) => {
         try {
             if (!req.user) {
@@ -12,7 +12,7 @@ export const authorizeRole = (role: Role) => {
                 })
             }
 
-            if (req.user.role !== role) {
+            if (!allowedRoles.includes(req.user.role)) {
                 return res.status(401).json({
                     success: false,
                     message: "Unauthorized"

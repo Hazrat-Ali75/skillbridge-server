@@ -1,5 +1,5 @@
 import { prisma } from "../../config/prisma"
-import { Role } from "../../generated/prisma/enums";
+import { BookingStatus } from "../../generated/prisma/enums";
 
 
 interface createBookingPayload {
@@ -9,10 +9,7 @@ interface createBookingPayload {
     duration: number;
 }
 
-const createBookingService = async (payload: createBookingPayload, role: Role) => {
-    if (role !== "STUDENT") {
-        throw new Error("Unauthorized !!! You are not allowed to book a session")
-    }
+const createBookingService = async (payload: createBookingPayload) => {
     const result = await prisma.booking.create({
         data: payload
     })
@@ -43,9 +40,18 @@ const getBookingByIdService = async (id: string) => {
     return result
 }
 
+const updateBookingStatusService = async (id: string, status: string) => {
+    const result = await prisma.booking.update({
+        where: { id },
+        data: { status: status as BookingStatus }
+    })
+    return result
+}
+
 
 export const bookingService = {
     createBookingService,
     getAllBookingsService,
     getBookingByIdService,
+    updateBookingStatusService
 }
